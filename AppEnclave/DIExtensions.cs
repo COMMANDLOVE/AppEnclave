@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -47,6 +48,11 @@ namespace AppEnclave
             app.UseMiddleware<TenantDispatcherMiddleware>();
 
             return app;
+        }
+
+        public static bool IsTenant(this IWebHostEnvironment env)
+        {
+            return env is TenantEnvironment;
         }
     }
 }
