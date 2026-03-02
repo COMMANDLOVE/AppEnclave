@@ -34,6 +34,15 @@ AppEnclave is built for efficiency. To achieve the lowest possible memory overhe
 
 ---
 
+## 📦 Installation
+
+You can install **AppEnclave** via NuGet using the .NET CLI or the Package Manager Console.
+
+### .NET CLI (Recommended)
+```bash
+dotnet add package AppEnclave --version 1.0.0
+```
+
 ## 💻 Quick Start
 ### 1. Create an Enclave plugin in Child app
 ```csharp
