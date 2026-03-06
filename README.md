@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/licence-mit-blue)](https://opensource.org/license/mit) [![Nuget: v1.1](https://img.shields.io/badge/nuget-v1.1-brightgreen)](https://www.nuget.org/packages/AppEnclave)
+[![License: MIT](https://img.shields.io/badge/licence-mit-blue)](https://opensource.org/license/mit) [![Nuget: v1.2](https://img.shields.io/badge/nuget-v1.2-brightgreen)](https://www.nuget.org/packages/AppEnclave)
 
 
 # AppEnclave 🛡️
