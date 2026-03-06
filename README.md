@@ -43,7 +43,7 @@ You can install **AppEnclave** via NuGet using the .NET CLI or the Package Manag
 
 ### .NET CLI (Recommended)
 ```bash
-dotnet add package AppEnclave --version 1.1.0
+dotnet add package AppEnclave --version 1.2.0
 ```
 
 ## 💻 Quick Start
